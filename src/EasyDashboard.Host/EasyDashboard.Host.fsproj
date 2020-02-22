@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="WorkerService.fs" />
+        <Compile Include="Program.fs" />
+        <Content Include="appsettings.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.2" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.2" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.2" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EasyDashboard.Api\EasyDashboard.Api.fsproj" />
+    </ItemGroup>
+
+</Project>
