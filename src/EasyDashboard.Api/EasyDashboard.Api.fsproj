@@ -6,6 +6,7 @@
 
     <ItemGroup>
         <Compile Include="Init.fs" />
+        <Folder Include="Endpoints" />
     </ItemGroup>
 
     <ItemGroup>
