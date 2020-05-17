@@ -1,11 +1,12 @@
-﻿namespace EasyDashboard
+﻿namespace EasyDashboard.Host
 
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Configuration
+open WorkerService
 
 module Host =
-    let configureAppServices (hostContext:HostBuilderContext) (services:IServiceCollection) =
+    let configureAppServices (_:HostBuilderContext) (services:IServiceCollection) =
         services.AddHostedService<WorkerService>() |> ignore<IServiceCollection>
         
     let configureAppConfiguration (hostContext:HostBuilderContext) (config:IConfigurationBuilder) =  

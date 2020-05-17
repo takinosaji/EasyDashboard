@@ -1,4 +1,4 @@
-﻿namespace EasyDashboard
+﻿module EasyDashboard.Host.WorkerService
 
 open Microsoft.Extensions.Configuration
 open System.Threading.Tasks
@@ -11,10 +11,11 @@ type WorkerService(logger : ILogger<WorkerService>,
     
     let _logger = logger
     
-    override bs.ExecuteAsync stoppingToken =
-        let f : Async<unit> = async {
-            let hostingSection = configuration.GetSection "Hosting"
-            EasyDashboard.Api.Init (hostingSection.GetValue("Host")) (hostingSection.GetValue("Port")) |> ignore
+    override bs.ExecuteAsync _ =
+        let asyncExpression = async {
+            EasyDashboard.Api.Startup.ExtractStartupSettings configuration |>
+            EasyDashboard.Api.Startup.Run |>
+            ignore
         }
         
-        Async.StartAsTask f :> Task
+        Async.StartAsTask asyncExpression :> Task
