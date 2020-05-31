@@ -11,14 +11,13 @@ module Host =
         
     let configureAppConfiguration (hostContext:HostBuilderContext) (config:IConfigurationBuilder) =  
         config
-            .AddJsonFile("appsettings.json",false,true)
-            .AddJsonFile(sprintf "appsettings.%s.json" hostContext.HostingEnvironment.EnvironmentName ,true)
+            .AddJsonFile("appsettings.json", false, true)
+            .AddJsonFile(sprintf "appsettings.%s.json" hostContext.HostingEnvironment.EnvironmentName, true)
             .AddEnvironmentVariables() |> ignore
         
     let CreateHostBuilder argv : IHostBuilder =
         let builder = Host.CreateDefaultBuilder(argv)
         builder
-            .ConfigureAppConfiguration(configureAppConfiguration)
             .ConfigureServices(configureAppServices)
     
     [<EntryPoint>]

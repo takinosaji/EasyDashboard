@@ -18,4 +18,4 @@ type WorkerService(logger : ILogger<WorkerService>,
             ignore
         }
         
-        Async.StartAsTask asyncExpression :> Task
+        upcast Async.StartAsTask asyncExpression

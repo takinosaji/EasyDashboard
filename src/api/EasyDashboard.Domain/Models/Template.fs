@@ -1,27 +1,38 @@
 ﻿module Models.Template
 
+type HealthyCriteria = string
+type UnhealthyCriteria = string option
+
 type HealthCriteriaTemplate =
     {
-        HealthyCriteria: string
-        UnhealthyCriteria: string option         
+        HealthyCriteria: HealthyCriteria
+        UnhealthyCriteria: UnhealthyCriteria
     }
+
+type PropertyName = string
+type PropertyDescription = string
+type PropertyPath = string
 
 type PropertyTemplate =
     {
-        PropertyName: string
-        PropertyDescription: string
-        PropertyPath: string
+        Name: PropertyName
+        Description: PropertyDescription
+        Path: PropertyPath
         HealthCriteria: HealthCriteriaTemplate
     }
 
+type Url = string
+
 type EnvironmentEndpointTemplate =
     {
-        Url: string
+        Url: Url
         Properties: PropertyTemplate list                
     }
 
+type RefreshInterval = int
+
 type EnvironmentTemplate =
     {
-        RefreshInterval: int
+        RefreshInterval: RefreshInterval
         Endpoints: EnvironmentEndpointTemplate list
     }

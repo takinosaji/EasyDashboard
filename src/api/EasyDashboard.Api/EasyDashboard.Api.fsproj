@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Endpoints" />
+        <Compile Include="Endpoints\Static.fs" />
         <Compile Include="Startup.fs" />
     </ItemGroup>
 

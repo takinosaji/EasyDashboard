@@ -1,17 +1,17 @@
 ﻿namespace EasyDashboard.Api
 
 open System.IO
-open System.Threading
 open Suave
+open System.Threading
 open Microsoft.Extensions.Configuration
 
+open EasyDashboard.Api.Endpoints
+
 module Startup =
-    
-    module Constants =
-        let [<Literal>] ConfigSectionName = "Hosting"        
-        let [<Literal>] PortField = "Host"
-        let [<Literal>] HostField = "Port"
-        let [<Literal>] HomeFolderField = "Hosting"
+    let [<Literal>] private ConfigSectionName = "Hosting"        
+    let [<Literal>] private PortField = "Port"
+    let [<Literal>] private HostField = "Host"
+    let [<Literal>] private HomeFolderField = "HomeFolder"
 
     type ApiStartupSettings = {
         Host: string
@@ -20,17 +20,16 @@ module Startup =
     }
         
     let ExtractStartupSettings (configuration: IConfiguration) =
-        let hostingSection = configuration.GetSection Constants.ConfigSectionName
-        let settings = {
-            Host = hostingSection.GetValue(Constants.HostField)
-            Port = hostingSection.GetValue(Constants.PortField)
-            HomeFolder = hostingSection.GetValue(Constants.HomeFolderField)
+        let hostingSection = configuration.GetSection ConfigSectionName
+        {
+            Host = hostingSection.GetValue(HostField)
+            Port = hostingSection.GetValue(PortField)
+            HomeFolder = hostingSection.GetValue(HomeFolderField)
         }
-        settings
 
     let Run (webAppConfig: ApiStartupSettings) =
         let cts = new CancellationTokenSource()
-        let conf = {
+        let suaveConfig = {
             defaultConfig with
             cancellationToken = cts.Token
             bindings = [ HttpBinding.createSimple HTTP webAppConfig.Host webAppConfig.Port ]
@@ -39,10 +38,12 @@ module Startup =
 
         let app =
           choose [
-              
+            Static.EntryPoint webAppConfig.HomeFolder
+            Static.AssetFiles
+            Static.NotFoundHandler
           ]
 
-        let server = startWebServerAsync conf (Successful.OK "Hello World") |> snd
+        let server = startWebServerAsync suaveConfig app |> snd
           
         Async.Start(server, cts.Token)       
         cts
