@@ -1,12 +1,12 @@
 ﻿module Models.Template
 
 type HealthyCriteria = string
-type UnhealthyCriteria = string option
+type UnhealthyCriteria = string
 
 type HealthCriteriaTemplate =
     {
         HealthyCriteria: HealthyCriteria
-        UnhealthyCriteria: UnhealthyCriteria
+        UnhealthyCriteria: UnhealthyCriteria option
     }
 
 type PropertyName = string
