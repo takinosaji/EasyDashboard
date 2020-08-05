@@ -27,4 +27,8 @@
       <ProjectReference Include="..\EasyDashboard.Api\EasyDashboard.Api.fsproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="Properties\launchSettings.json" />
+    </ItemGroup>
+
 </Project>
