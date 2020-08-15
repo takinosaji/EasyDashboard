@@ -6,6 +6,8 @@
 
     <ItemGroup>
         <Compile Include="Endpoints\Static.fs" />
+        <Compile Include="Endpoints\Dashboard.fs" />
+        <Compile Include="Endpoints\Websocket.fs" />
         <Compile Include="Startup.fs" />
     </ItemGroup>
 

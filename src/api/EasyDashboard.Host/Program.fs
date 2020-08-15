@@ -1,13 +1,11 @@
-﻿namespace EasyDashboard.Host
+﻿module EasyDashboard.Host.Entry
 
-open Microsoft.Extensions.DependencyInjection
-open Microsoft.Extensions.Hosting
-open Microsoft.Extensions.Configuration
-open WorkerService
+    open Microsoft.Extensions.DependencyInjection
+    open Microsoft.Extensions.Hosting
+    open EasyDashboard.Host.WorkerService
 
-module Host =
     let configureAppServices (_:HostBuilderContext) (services:IServiceCollection) =
-        services.AddHostedService<WorkerService>() |> ignore<IServiceCollection>
+        services.AddHostedService<WorkerService>() |> ignore
         
     let CreateHostBuilder argv : IHostBuilder =
         let builder = Host.CreateDefaultBuilder(argv)

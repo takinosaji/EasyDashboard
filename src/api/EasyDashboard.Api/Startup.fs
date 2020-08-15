@@ -1,13 +1,14 @@
-﻿namespace EasyDashboard.Api
+﻿module EasyDashboard.Api.Startup
 
-open System.IO
-open Suave
-open System.Threading
-open Microsoft.Extensions.Configuration
+    open System.IO
+    open Suave
+    open Suave.Filters
+    open Suave.Operators
+    open System.Threading
+    open Microsoft.Extensions.Configuration
 
-open EasyDashboard.Api.Endpoints
+    open EasyDashboard.Api.Endpoints
 
-module Startup =
     let [<Literal>] private ConfigSectionName = "Hosting"        
     let [<Literal>] private PortField = "Port"
     let [<Literal>] private HostField = "Host"
@@ -38,6 +39,8 @@ module Startup =
 
         let app =
           choose [
+            GET >=> choose
+                [ path "/dashboard" >=> Dashboard.dashboardHandler ]
             Static.EntryPoint webAppConfig.HomeFolder
             Static.AssetFiles
             Static.NotFoundHandler
