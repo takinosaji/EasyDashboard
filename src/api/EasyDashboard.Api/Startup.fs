@@ -4,6 +4,7 @@
     open Suave
     open Suave.Filters
     open Suave.Operators
+    open Suave.WebSocket
     open System.Threading
     open Microsoft.Extensions.Configuration
 
@@ -32,15 +33,17 @@
         let cts = new CancellationTokenSource()
         let suaveConfig = {
             defaultConfig with
-            cancellationToken = cts.Token
-            bindings = [ HttpBinding.createSimple HTTP webAppConfig.Host webAppConfig.Port ]
-            homeFolder = Some(Path.GetFullPath webAppConfig.HomeFolder)
+                cancellationToken = cts.Token
+                bindings = [ HttpBinding.createSimple HTTP webAppConfig.Host webAppConfig.Port ]
+                homeFolder = Some(Path.GetFullPath webAppConfig.HomeFolder)
         }
 
         let app =
           choose [
             GET >=> choose
-                [ path "/dashboard" >=> Dashboard.dashboardHandler ]
+                [ path "/dashboard" >=> Dashboard.handler
+                  path "/health" >=> Health.handler
+                  path "/websocket" >=> handShake LiveUpdates.handler]
             Static.EntryPoint webAppConfig.HomeFolder
             Static.AssetFiles
             Static.NotFoundHandler

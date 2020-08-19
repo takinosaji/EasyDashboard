@@ -2,10 +2,21 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
+        <LangVersion>preview</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Models\Template.fs" />
+        <Compile Include="ConstrainedType.fs" />
+        <Compile Include="Versioning.fs" />
+        <Compile Include="Template\Models.fs" />
+        <Compile Include="Template\Dtos.fs" />
+        <Compile Include="Summary\Models.fs" />
+        <Compile Include="Summary\Workflows.fs" />
+        <Compile Include="CalculationWorkflow.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     </ItemGroup>
 
 </Project>

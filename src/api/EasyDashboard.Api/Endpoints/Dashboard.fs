@@ -3,7 +3,7 @@
     open Suave
     open Suave.Successful 
 
-    let dashboardHandler: WebPart =
+    let handler: WebPart =
         fun (x : HttpContext) ->
             async {
               do! Async.Sleep 10
