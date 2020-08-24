@@ -1,26 +1,27 @@
-﻿module EasyDashboard.Domain.Summary.Models
+﻿module EasyDashboard.Domain.Health.Models
 
     open System
 
-    type EnvironmentHealth =
+    type HealthStatus =
         | Healthy
         | Unhealthy
         | Sick
     
-    type EnvironmentProperty = {
+    type HealthProperty = {
         Name: string
         Description: string
         Value: string
         SourceUrl: string
-        Status: EnvironmentHealth
+        Status: HealthStatus
     }
         
-    type EnvironmentSummary = {
+    type EnvironmentHeartBeat = {
         Name: string
-        Status: EnvironmentHealth
+        Status: HealthStatus
         HeartbeatTime: DateTimeOffset
+        Properties: HealthProperty list
     }
     
     type DashboardSummary = {
-        Environments: EnvironmentHealth list
+        Environments: EnvironmentHeartBeat list
     }

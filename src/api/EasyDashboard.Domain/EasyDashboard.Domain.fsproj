@@ -6,17 +6,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="ResultExtensions.fs" />
+        <Compile Include="BuiltInTypeFactory.fs" />
+        <Compile Include="AliasedTypes.fs" />
         <Compile Include="ConstrainedType.fs" />
         <Compile Include="Versioning.fs" />
         <Compile Include="Template\Models.fs" />
         <Compile Include="Template\Dtos.fs" />
-        <Compile Include="Summary\Models.fs" />
-        <Compile Include="Summary\Workflows.fs" />
+        <Compile Include="Template\Factory.fs" />
+        <Compile Include="Health\Models.fs" />
+        <Compile Include="Health\Workflows.fs" />
         <Compile Include="CalculationWorkflow.fs" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     </ItemGroup>
 
 </Project>

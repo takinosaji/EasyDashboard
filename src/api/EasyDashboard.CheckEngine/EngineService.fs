@@ -1,10 +1,10 @@
-﻿module EasyDashboard.Host.WorkerService
+﻿namespace EasyDashboard.CheckEngine
 
-    open Microsoft.Extensions.Configuration
     open Microsoft.Extensions.Hosting
     open Microsoft.Extensions.Logging
-
-    type WorkerService(logger : ILogger<WorkerService>,
+    open Microsoft.Extensions.Configuration
+            
+    type EngineService(logger : ILogger<EngineService>,
                        configuration: IConfiguration) =
         inherit BackgroundService()
         
@@ -12,9 +12,11 @@
         
         override bs.ExecuteAsync _ =
             let asyncExpression = async {
-                EasyDashboard.Api.Startup.ExtractStartupSettings configuration |>
-                EasyDashboard.Api.Startup.Run |>
-                ignore
+                while true do
+                    do! Async.Sleep 1000
+                    let c = 1
+                    ()
+                return 0
             }
             
             upcast Async.StartAsTask asyncExpression

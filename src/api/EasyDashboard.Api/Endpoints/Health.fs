@@ -1,11 +1,11 @@
 ﻿module EasyDashboard.Api.Endpoints.Health
     
-    open EasyDashboard.Api.Utils
     open EasyDashboard.Domain.Versioning
     
+    open Giraffe
     open System.Runtime.Serialization
-    open Suave
-    open Suave.Successful 
+    open Microsoft.AspNetCore.Http
+    open FSharp.Control.Tasks.V2.ContextInsensitive
 
     [<DataContract>]
     type HealthDto = {
@@ -14,10 +14,10 @@
         [<field: DataMember(Name="uiVersion")>]
         UiVersion: string
     }
-    
-    let handler: WebPart =
-        fun (x : HttpContext) ->
-            async {
-                return! OK ({ ApiVersion = ApiVersion
-                              UiVersion = UiVersion } |> toJson) x
+
+    let handler: HttpHandler =
+        fun (next : HttpFunc) (ctx : HttpContext) ->
+            task {
+              return! json { ApiVersion = ApiVersion
+                             UiVersion = UiVersion } next ctx
             }

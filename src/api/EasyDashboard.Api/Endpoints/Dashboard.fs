@@ -1,11 +1,12 @@
 ﻿module EasyDashboard.Api.Endpoints.Dashboard
 
-    open Suave
-    open Suave.Successful 
-
-    let handler: WebPart =
-        fun (x : HttpContext) ->
-            async {
+    open Giraffe
+    open Microsoft.AspNetCore.Http
+    open FSharp.Control.Tasks.V2.ContextInsensitive
+    
+    let handler: HttpHandler =
+        fun (next : HttpFunc) (ctx : HttpContext) ->
+            task {
               do! Async.Sleep 10
-              return! OK "Dashboard hit" x
+              return! json "Dashboard hit" next ctx
             }

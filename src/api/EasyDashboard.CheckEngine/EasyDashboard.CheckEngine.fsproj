@@ -5,16 +5,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Endpoints\Dashboard.fs" />
-        <Compile Include="Endpoints\Health.fs" />
-        <Compile Include="Endpoints\Error.fs" />
-        <Compile Include="Settings.fs" />
-        <Compile Include="Configuration.fs" />
+        <Compile Include="EngineService.fs" />
         <Compile Include="HostBuilder.fs" />
+        <Compile Include="Workflows\InitHealthCheck.fs" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Giraffe" Version="4.1.0" />
+      <PackageReference Include="FSharp.Control.Reactive" Version="4.4.2" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.7" />
     </ItemGroup>
 

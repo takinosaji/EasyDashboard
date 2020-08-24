@@ -1,16 +1,22 @@
 ﻿module EasyDashboard.Domain.Template.Dtos
-
+        
+    type HealthCriteriaTemplateDto =
+        {
+            HealthyCriterion: string
+            UnhealthyCriterion: string
+        }  
+         
     type EnvironmentPropertyTemplateDto =
         {
             Name: string
             Description: string
             Path: string
-            HealthCriteria: string
+            HealthCriteria: HealthCriteriaTemplateDto
         }
-     
+        
     type EnvironmentEndpointTemplateDto =
         {
-            Url: string
+            Uri: string
             ContentType: string
             Properties: EnvironmentPropertyTemplateDto list                
         }
@@ -22,4 +28,3 @@
             RefreshInterval: int
             Endpoints: EnvironmentEndpointTemplateDto list
         }
-        
