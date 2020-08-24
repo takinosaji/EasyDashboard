@@ -1,6 +1,5 @@
 ﻿module EasyDashboard.Domain.Template.Models
 
-    open System
     open EasyDashboard.Domain.ConstrainedType
     
         module HealthCriterion =
@@ -38,7 +37,20 @@
             let create interval =
                 createInt  (nameof RefreshInterval) RefreshInterval 10 300 interval            
             let value (RefreshInterval interval) = interval
-    
+  
+          
+            
+        module Uri =
+            type Uri = private Uri of System.Uri   
+            let create uri =                
+                try
+                    Ok (Uri uri)
+                with
+                    exn -> Error(exn.ToString())      
+            let value (Uri uri) = uri
+        
+        
+        
         type HealthCriteriaTemplate =
             {
                 HealthyCriterion: HealthCriterion.HealthCriterion
@@ -55,7 +67,7 @@
             
         type EnvironmentEndpointTemplate =
             {
-                Url: Uri
+                Url: Uri.Uri
                 Properties: EnvironmentPropertyTemplate list                
             }
 

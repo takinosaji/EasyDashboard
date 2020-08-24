@@ -7,13 +7,12 @@
 
     <ItemGroup>
         <Compile Include="ResultExtensions.fs" />
-        <Compile Include="BuiltInTypeFactory.fs" />
         <Compile Include="AliasedTypes.fs" />
         <Compile Include="ConstrainedType.fs" />
-        <Compile Include="Versioning.fs" />
         <Compile Include="Template\Models.fs" />
         <Compile Include="Template\Dtos.fs" />
         <Compile Include="Template\Factory.fs" />
+        <Compile Include="Template\Provider.fs" />
         <Compile Include="Health\Models.fs" />
         <Compile Include="Health\Workflows.fs" />
         <Compile Include="CalculationWorkflow.fs" />

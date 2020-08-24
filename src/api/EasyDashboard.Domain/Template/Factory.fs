@@ -2,7 +2,6 @@
 
     open EasyDashboard.Domain.Template.Dtos
     open EasyDashboard.Domain.Template.Models
-    open EasyDashboard.Domain.BuiltInTypeFactory
     
     open System
     open Result
@@ -79,11 +78,11 @@
         fun endpointDto ->
             result {
                 let adaptedUriFactory = EnvironmentTemplateCreationError.StringErrorAdapter
-                                                  createUri
+                                                  Uri.create
                                                   InvalidUri
                       
                 let! uri = endpointDto.Uri |> adaptedUriFactory
-                let! properties = endpointDto.Properties |> List.map (fun e -> toPropertyModel e) |> sequence
+                let! properties = endpointDto.Properties |> List.map (fun prop -> toPropertyModel prop) |> sequence
                 
                 return {
                     Url = uri
@@ -93,23 +92,23 @@
     
     type ToEnvironmentModel = EnvironmentTemplateDto -> Result<EnvironmentTemplate, EnvironmentTemplateCreationError>
     let toEnvironmentModel: ToEnvironmentModel =
-        fun templateDto ->                
+        fun environmentDto ->                
             result {
-                let! name = templateDto.Name |>
+                let! name = environmentDto.Name |>
                             EnvironmentTemplateCreationError.StringErrorAdapter Name.create InvalidName
-                let! description = if String.IsNullOrEmpty templateDto.Description then
+                let! description = if String.IsNullOrEmpty environmentDto.Description then
                                     Ok None
                                     else 
-                                       templateDto.Description
+                                       environmentDto.Description
                                         |> EnvironmentTemplateCreationError.StringErrorAdapter
                                            Description.create
                                            InvalidDescription
                                         |> toOption
-                let! refreshInterval = templateDto.RefreshInterval
+                let! refreshInterval = environmentDto.RefreshInterval
                                         |> EnvironmentTemplateCreationError.StringErrorAdapter
                                                RefreshInterval.create
                                                InvalidRefreshInterval                   
-                let! endpoints = templateDto.Endpoints |> List.map (fun e -> toEndpointModel e) |> sequence
+                let! endpoints = environmentDto.Endpoints |> List.map (fun e -> toEndpointModel e) |> sequence
                 
                 return {
                     Name = name

@@ -1,14 +1,21 @@
 ﻿module EasyDashboard.Api.Endpoints.Health
-    
-    open EasyDashboard.Domain.Versioning
-    
+        
     open Giraffe
     open System.Runtime.Serialization
+    open System.Reflection
     open Microsoft.AspNetCore.Http
     open FSharp.Control.Tasks.V2.ContextInsensitive
 
+    let private ApiVersion =
+        let assembly = Assembly.GetEntryAssembly()
+        let version = assembly.GetName().Version
+        sprintf "%i.%i.%i" version.Major version.Minor version.Build
+        
+    let private UiVersion =
+        sprintf "%i.%i.%i" 1 0 0
+    
     [<DataContract>]
-    type HealthDto = {
+    type private HealthDto = {
         [<field: DataMember(Name="apiVersion")>]
         ApiVersion: string
         [<field: DataMember(Name="uiVersion")>]

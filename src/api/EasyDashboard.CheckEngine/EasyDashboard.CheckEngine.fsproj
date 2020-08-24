@@ -7,7 +7,8 @@
     <ItemGroup>
         <Compile Include="EngineService.fs" />
         <Compile Include="HostBuilder.fs" />
-        <Compile Include="Workflows\InitHealthCheck.fs" />
+        <Compile Include="Workflows\InitHealthCheck\Workflow.fs" />
+        <Compile Include="Workflows\InitHealthCheck\FileSystem.fs" />
     </ItemGroup>
 
     <ItemGroup>
