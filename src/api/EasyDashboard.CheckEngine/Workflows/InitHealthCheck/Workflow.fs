@@ -61,22 +61,22 @@
         | Idling
         | Faulted of string                 
     type InitHealthCheckUnitsAsync = InitHeathCheckCommand -> TemplatesProvider -> CheckEngineState Async seq   
-    let initHealthCheckUnitsAsync: InitHealthCheckUnitsAsync =
-        fun initCommand templateProvider ->
-            async {
-               let templateResult = templateProvider { FolderPath = initCommand.FolderPath }
-               match templateResult with
-               | Error err -> return Faulted err
-               | Ok None -> return Idling
-               | Ok (Some templateSequence) ->
-                   let! templates = templateSequence |> Async.Parallel
-                   let c = templates
-                         |> Array.map (fun template -> processTemplate template)
-                   
-            }
-            
-            
-            
+//    let initHealthCheckUnitsAsync: InitHealthCheckUnitsAsync =
+//        fun initCommand templateProvider ->
+//            async {
+//               let templateResult = templateProvider { FolderPath = initCommand.FolderPath }
+//               match templateResult with
+//               | Error err -> return Faulted err
+//               | Ok None -> return Idling
+//               | Ok (Some templateSequence) ->
+//                   let! templates = templateSequence |> Async.Parallel
+//                   let c = templates
+//                         |> Array.map (fun template -> processTemplate template)
+//                   
+//            }
+//            
+//            
+//            
             
             
             
