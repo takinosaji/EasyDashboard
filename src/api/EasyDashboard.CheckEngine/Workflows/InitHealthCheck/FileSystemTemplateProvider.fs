@@ -1,4 +1,4 @@
-﻿module EasyDashboard.CheckEngine.InitHealthCheck.FileSystem
+﻿module EasyDashboard.CheckEngine.InitHealthCheck.FileSystemTemplateProvider
 
     open EasyDashboard.Domain.Template.Provider
 
@@ -6,13 +6,17 @@
         
     let getTemplatePaths folderPath =
         try
-            match Directory.GetFiles "*.json" with
+            let templatePaths = Directory.GetFiles(folderPath, "*.json")
+            match templatePaths with
             | [||] -> Ok None
             | filePaths -> Ok (Some filePaths)
 
          with
             | exn -> Error(exn.ToString())
-    
+    type RequestTemplateCommand = {
+        Filename: string
+        Read: string Async
+    }
     let getRequestTemplateCommands (paths: string array) :RequestTemplateCommand seq =
         paths
         |> Array.toSeq
@@ -21,7 +25,7 @@
               Read = File.ReadAllTextAsync path |> Async.AwaitTask
             })
         
-    let getTemplateSequence (commandSequence: RequestTemplateCommand seq) =
+    let requestTemplates (commandSequence: RequestTemplateCommand seq) =
         Seq.map (fun command ->
             async {
                 try
@@ -39,7 +43,7 @@
             }) commandSequence
     
     // TODO: Consider implementation of nonempty sequence 
-    let getTemplatesFromFolderSequence: GetTemplateSequence =
+    let getTemplatesFromFS: TemplatesProvider =
         fun command ->
                 try
                     match getTemplatePaths command.FolderPath with
@@ -50,7 +54,7 @@
                         | Some paths ->
                             let templates = paths
                                             |> getRequestTemplateCommands
-                                            |> getTemplateSequence          
+                                            |> requestTemplates          
                             Ok (Some templates)
                 with
                 | exn -> Error(exn.ToString())

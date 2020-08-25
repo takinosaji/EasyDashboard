@@ -3,19 +3,15 @@
     type GetTemplatesCommand = {
         FolderPath: string
     }
-    type RequestTemplateCommand = {
-        Filename: string
-        Read: string Async
-    }
-    type TemplateContent = {
+    type TemplateContentDto = {
         Filename: string
         Content : string
     }
-    type TemplateRequestError = {
+    type TemplateRequestErrorDto = {
         Filename: string
         Error: string
     }
-    type RequestedTemplate =
-    | TemplateContent of TemplateContent
-    | TemplateError of TemplateRequestError    
-    type GetTemplateSequence = GetTemplatesCommand -> Result<RequestedTemplate Async seq option, string>
+    type RequestedTemplateDto =
+    | TemplateContent of TemplateContentDto
+    | TemplateError of TemplateRequestErrorDto    
+    type TemplatesProvider = GetTemplatesCommand -> Result<RequestedTemplateDto Async seq option, string>

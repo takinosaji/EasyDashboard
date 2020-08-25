@@ -22,6 +22,6 @@
         Properties: HealthProperty list
     }
     
-    type DashboardSummary = {
+    type HealthDashboard = {
         Environments: EnvironmentHeartBeat list
     }

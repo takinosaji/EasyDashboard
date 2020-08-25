@@ -1,10 +1,38 @@
 ﻿module EasyDashboard.Domain.Template.Factory
 
-    open EasyDashboard.Domain.Template.Dtos
     open EasyDashboard.Domain.Template.Models
     
     open System
     open Result
+        
+    type HealthCriteriaTemplateDto =
+        {
+            HealthyCriterion: string
+            UnhealthyCriterion: string
+        }  
+         
+    type EnvironmentPropertyTemplateDto =
+        {
+            Name: string
+            Description: string
+            Path: string
+            HealthCriteria: HealthCriteriaTemplateDto
+        }
+        
+    type EnvironmentEndpointTemplateDto =
+        {
+            Uri: string
+            ContentType: string
+            Properties: EnvironmentPropertyTemplateDto list                
+        }
+    
+    type EnvironmentTemplateDto =
+        {
+            Name: string
+            Description: string
+            RefreshInterval: int
+            Endpoints: EnvironmentEndpointTemplateDto list
+        }
         
     type EnvironmentTemplateCreationError =
         | InvalidName of string

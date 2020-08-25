@@ -1,6 +1,5 @@
 ﻿module EasyDashboard.CheckEngine.InitHealthCheck.Workflow
         
-    open EasyDashboard.Domain.Template.Dtos
     open EasyDashboard.Domain.Template.Models
     open EasyDashboard.Domain.Template.Factory
     open EasyDashboard.Domain.Template.Provider
@@ -17,14 +16,14 @@
         Name: string
         Error: string
     }
-    type ParsedTemplate =
+    type ParsedTemplateDto =
         | Correct of EnvironmentTemplate
         | WithErrors of IncorrectTemplate
         | Failed of FailedTemplate
-    type ProcessedTemplate =
-        | Processed of ParsedTemplate
+    type ProcessedTemplateDto =
+        | Processed of ParsedTemplateDto
         | Unprocessed of FailedTemplate
-    type ParseTemplate = TemplateContent -> ParsedTemplate
+    type ParseTemplate = TemplateContentDto -> ParsedTemplateDto
     let parseTemplate: ParseTemplate =
         fun template ->
             try
@@ -42,7 +41,7 @@
                 Error = exn.ToString()
             }
              
-    type ProcessTemplate = RequestedTemplate -> ProcessedTemplate   
+    type ProcessTemplate = RequestedTemplateDto -> ProcessedTemplateDto   
     let processTemplate: ProcessTemplate =
         fun requestedTemplate ->
             match requestedTemplate with
@@ -52,10 +51,7 @@
                     Error = failedRequest.Error
                 }
             | TemplateContent successfulRequest ->
-                Processed (parseTemplate successfulRequest)
-   
-     
-            
+                Processed (parseTemplate successfulRequest)    
             
     type InitHeathCheckCommand = {
         FolderPath: string
@@ -64,7 +60,7 @@
         | Working of EnvironmentHeartBeat IObservable
         | Idling
         | Faulted of string                 
-    type InitHealthCheckUnitsAsync = InitHeathCheckCommand -> GetTemplateSequence -> CheckEngineState Async seq   
+    type InitHealthCheckUnitsAsync = InitHeathCheckCommand -> TemplatesProvider -> CheckEngineState Async seq   
     let initHealthCheckUnitsAsync: InitHealthCheckUnitsAsync =
         fun initCommand templateProvider ->
             async {

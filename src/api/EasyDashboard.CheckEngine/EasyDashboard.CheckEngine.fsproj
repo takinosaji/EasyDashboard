@@ -8,7 +8,7 @@
         <Compile Include="EngineService.fs" />
         <Compile Include="HostBuilder.fs" />
         <Compile Include="Workflows\InitHealthCheck\Workflow.fs" />
-        <Compile Include="Workflows\InitHealthCheck\FileSystem.fs" />
+        <Compile Include="Workflows\InitHealthCheck\FileSystemTemplateProvider.fs" />
     </ItemGroup>
 
     <ItemGroup>

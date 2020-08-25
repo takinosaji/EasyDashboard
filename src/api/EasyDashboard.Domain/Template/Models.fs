@@ -42,9 +42,9 @@
             
         module Uri =
             type Uri = private Uri of System.Uri   
-            let create uri =                
+            let create (uri: string) =                
                 try
-                    Ok (Uri uri)
+                    Ok(Uri(System.Uri(uri)))
                 with
                     exn -> Error(exn.ToString())      
             let value (Uri uri) = uri
