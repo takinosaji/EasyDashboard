@@ -8,21 +8,21 @@
     open System
     open System.Text.Json;
                               
-    type IncorrectTemplate = {
+    type IncorrectTemplateDto = {
         Name: string
         Error: EnvironmentTemplateCreationError
     }
-    type FailedTemplate = {
+    type FailedTemplateDto = {
         Name: string
         Error: string
     }
     type ParsedTemplateDto =
         | Correct of EnvironmentTemplate
-        | WithErrors of IncorrectTemplate
-        | Failed of FailedTemplate
+        | WithErrors of IncorrectTemplateDto
+        | Failed of FailedTemplateDto
     type ProcessedTemplateDto =
         | Processed of ParsedTemplateDto
-        | Unprocessed of FailedTemplate
+        | Unprocessed of FailedTemplateDto
     type ParseTemplate = TemplateContentDto -> ParsedTemplateDto
     let parseTemplate: ParseTemplate =
         fun template ->
