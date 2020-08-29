@@ -18,6 +18,8 @@
         | Ok value -> Ok (Some value)
         | Error error -> Error error
 
+    type AsyncResult<'a, 'e> = Async<Result<'a, 'e>>
+    
     type ResultBuilder() as self =
         member _.Return(x) = Ok x
         member _.ReturnFrom(m: 'T option) = m

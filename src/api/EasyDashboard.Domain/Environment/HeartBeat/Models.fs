@@ -1,11 +1,13 @@
-﻿module EasyDashboard.Domain.Health.Models
+﻿module EasyDashboard.Domain.Environment.HeartBeat.Models
 
+    open EasyDashboard.Domain.Environment.Models
+    
     open System
 
     type HealthStatus =
         | Healthy
-        | Unhealthy
         | Sick
+        | Dead
     
     type HealthProperty = {
         Name: string
@@ -16,10 +18,11 @@
     }
         
     type EnvironmentHeartBeat = {
-        Name: string
+        Name: Name.Name
+        Description: Description.Description option
         Status: HealthStatus
         HeartbeatTime: DateTimeOffset
-        Properties: HealthProperty list
+        Properties: HealthProperty list option
     }
     
     type HealthDashboard = {

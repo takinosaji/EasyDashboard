@@ -1,6 +1,6 @@
 ﻿module EasyDashboard.CheckEngine.InitHealthCheck.FileSystemTemplateProvider
 
-    open EasyDashboard.Domain.Template.Provider
+    open EasyDashboard.Domain.Environment.Template.Provider
 
     open System.IO
         
@@ -17,33 +17,25 @@
         Filename: string
         Read: string Async
     }
-    let getRequestTemplateCommands (paths: string array) :RequestTemplateCommand seq =
-        paths
-        |> Array.toSeq
-        |> Seq.map (fun path -> {
-              Filename = Path.GetFileName path
-              Read = File.ReadAllTextAsync path |> Async.AwaitTask
-            })
+    let getRequestedTemplateAsync (path: string) :RequestedTemplate Async =
+        async {
+            let fileName = Path.GetFileName path
+            try
+                let! content = File.ReadAllTextAsync path |> Async.AwaitTask
+                return TemplateContent {
+                    Filename = fileName
+                    Content = content
+                }
+            with
+            | exn ->
+                return TemplateError {
+                    Filename = fileName
+                    Error = exn.ToString()
+                }
+        }
         
-    let requestTemplates (commandSequence: RequestTemplateCommand seq) =
-        Seq.map (fun command ->
-            async {
-                try
-                    let! content = command.Read
-                    return TemplateContent {
-                        Filename = command.Filename
-                        Content = content
-                    }
-                with
-                | exn ->
-                    return TemplateError {
-                        Filename = command.Filename
-                        Error = exn.ToString()
-                    }
-            }) commandSequence
-    
     // TODO: Consider implementation of nonempty sequence 
-    let getTemplatesFromFS: TemplatesProvider =
+    let getTemplatesFromFSAsync: TemplateAsyncProvider =
         fun command ->
                 try
                     match getTemplatePaths command.FolderPath with
@@ -51,10 +43,9 @@
                     | Ok lookupResult ->
                         match lookupResult with
                         | None -> Ok None
-                        | Some paths ->
-                            let templates = paths
-                                            |> getRequestTemplateCommands
-                                            |> requestTemplates          
-                            Ok (Some templates)
+                        | Some paths ->    
+                            Ok (Some (paths
+                                |> Array.toSeq
+                                |> Seq.map getRequestedTemplateAsync))
                 with
                 | exn -> Error(exn.ToString())

@@ -8,7 +8,14 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EasyDashboard.Domain", "Eas
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EasyDashboard.CheckEngine", "EasyDashboard.CheckEngine\EasyDashboard.CheckEngine.fsproj", "{0EA1172B-9E20-4D8B-ABB1-0880FB54333C}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "EasyDashboard.DemoService", "..\demo\EasyDashboard.DemoService\EasyDashboard.DemoService.fsproj", "{65CD447C-E5A4-454A-B10A-477FDCC62C9C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{8E2158AD-E44B-4B07-8D45-9B29C67AF494}"
+ProjectSection(SolutionItems) = preProject
+	..\..\tools\demo\self-dead.json = ..\..\tools\demo\self-dead.json
+	..\..\tools\demo\self-healthy.json = ..\..\tools\demo\self-healthy.json
+	..\..\tools\demo\self-sick.json = ..\..\tools\demo\self-sick.json
+	..\..\tools\demo\self-with-errors.json = ..\..\tools\demo\self-with-errors.json
+	..\..\tools\demo\self-unrecognized.json = ..\..\tools\demo\self-unrecognized.json
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,10 +39,6 @@ Global
 		{0EA1172B-9E20-4D8B-ABB1-0880FB54333C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EA1172B-9E20-4D8B-ABB1-0880FB54333C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EA1172B-9E20-4D8B-ABB1-0880FB54333C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{65CD447C-E5A4-454A-B10A-477FDCC62C9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65CD447C-E5A4-454A-B10A-477FDCC62C9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65CD447C-E5A4-454A-B10A-477FDCC62C9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65CD447C-E5A4-454A-B10A-477FDCC62C9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection

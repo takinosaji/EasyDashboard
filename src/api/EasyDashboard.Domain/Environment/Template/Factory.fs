@@ -1,38 +1,40 @@
-﻿module EasyDashboard.Domain.Template.Factory
+﻿module EasyDashboard.Domain.Environment.Template.Factory
 
-    open EasyDashboard.Domain.Template.Models
+    open EasyDashboard.Domain.Environment.Template.Models
+    open EasyDashboard.Domain.Environment.Models
     
     open System
     open Result
+       
+    module DTOs =
+        type HealthCriteriaTemplateDto =
+            {
+                HealthyCriterion: string
+                UnhealthyCriterion: string
+            }  
+             
+        type EnvironmentPropertyTemplateDto =
+            {
+                Name: string
+                Description: string
+                Path: string
+                HealthCriteria: HealthCriteriaTemplateDto
+            }
+            
+        type EnvironmentEndpointTemplateDto =
+            {
+                Uri: string
+                ContentType: string
+                Properties: EnvironmentPropertyTemplateDto list                
+            }
         
-    type HealthCriteriaTemplateDto =
-        {
-            HealthyCriterion: string
-            UnhealthyCriterion: string
-        }  
-         
-    type EnvironmentPropertyTemplateDto =
-        {
-            Name: string
-            Description: string
-            Path: string
-            HealthCriteria: HealthCriteriaTemplateDto
-        }
-        
-    type EnvironmentEndpointTemplateDto =
-        {
-            Uri: string
-            ContentType: string
-            Properties: EnvironmentPropertyTemplateDto list                
-        }
-    
-    type EnvironmentTemplateDto =
-        {
-            Name: string
-            Description: string
-            RefreshInterval: int
-            Endpoints: EnvironmentEndpointTemplateDto list
-        }
+        type EnvironmentTemplateDto =
+            {
+                Name: string
+                Description: string
+                RefreshInterval: int
+                Endpoints: EnvironmentEndpointTemplateDto list
+            }
         
     type EnvironmentTemplateCreationError =
         | InvalidName of string
@@ -46,8 +48,37 @@
                 match func input with
                 | Ok input -> Ok input
                 | Error value -> Error (ctor value)
+                
+    type IncorrectTemplate = {
+        Name: string
+        Error: EnvironmentTemplateCreationError
+    }
+    type FaultedTemplate = {
+        Name: string
+        Error: string
+    } with
+        static member FromIncorrectTemplate (t: IncorrectTemplate) = 
+            match t.Error with
+            | InvalidName text
+            | InvalidDescription text
+            | InvalidCriterion text
+            | InvalidRefreshInterval text
+            | InvalidProperty text
+            | InvalidUri text
+             -> {
+                 Name = t.Name
+                 Error = text
+                 }
+            
+    type ParsedTemplate =
+        | Correct of EnvironmentTemplate
+        | WithErrors of IncorrectTemplate
+        | Unrecognized of FaultedTemplate
+    type ProcessedTemplate =
+        | Processed of ParsedTemplate
+        | Faulted of FaultedTemplate
         
-    type ToHealthCriteriaModel = HealthCriteriaTemplateDto ->
+    type ToHealthCriteriaModel = DTOs.HealthCriteriaTemplateDto ->
                                     Result<HealthCriteriaTemplate, EnvironmentTemplateCreationError>
     let toHealthCriteriaModel: ToHealthCriteriaModel =
         fun healthDto ->
@@ -73,7 +104,7 @@
             }
                     
                     
-    type ToPropertyModel = EnvironmentPropertyTemplateDto ->
+    type ToPropertyModel = DTOs.EnvironmentPropertyTemplateDto ->
                             Result<EnvironmentPropertyTemplate, EnvironmentTemplateCreationError>
     let toPropertyModel: ToPropertyModel =
         fun propertyDto ->
@@ -100,7 +131,7 @@
                 }
             }
 
-    type ToEndpointModel = EnvironmentEndpointTemplateDto ->
+    type ToEndpointModel = DTOs.EnvironmentEndpointTemplateDto ->
                             Result<EnvironmentEndpointTemplate, EnvironmentTemplateCreationError>
     let toEndpointModel: ToEndpointModel =
         fun endpointDto ->
@@ -118,7 +149,7 @@
                 }
             }     
     
-    type ToEnvironmentModel = EnvironmentTemplateDto -> Result<EnvironmentTemplate, EnvironmentTemplateCreationError>
+    type ToEnvironmentModel = DTOs.EnvironmentTemplateDto -> Result<EnvironmentTemplate, EnvironmentTemplateCreationError>
     let toEnvironmentModel: ToEnvironmentModel =
         fun environmentDto ->                
             result {

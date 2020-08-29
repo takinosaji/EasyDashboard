@@ -7,14 +7,19 @@
 
     <ItemGroup>
         <Compile Include="ResultExtensions.fs" />
-        <Compile Include="AliasedTypes.fs" />
-        <Compile Include="ConstrainedType.fs" />
-        <Compile Include="Template\Models.fs" />
-        <Compile Include="Template\Factory.fs" />
-        <Compile Include="Template\Provider.fs" />
-        <Compile Include="HeartBeat\Models.fs" />
-        <Compile Include="HeartBeat\Workflows.fs" />
+        <Compile Include="ConstrainedTypes.fs" />
+        <Compile Include="Environment\Models.fs" />
+        <Compile Include="Environment\Template\Models.fs" />
+        <Compile Include="Environment\Template\Provider.fs" />
+        <Compile Include="Environment\Template\Factory.fs" />
+        <Compile Include="Environment\HeartBeat\Models.fs" />
+        <Compile Include="Environment\HeartBeat\Provider.fs" />
+        <Compile Include="Environment\HeartBeat\Factory.fs" />
         <Compile Include="CalculationWorkflow.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     </ItemGroup>
 
 </Project>

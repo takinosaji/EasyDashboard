@@ -1,29 +1,14 @@
 ﻿module EasyDashboard.CheckEngine.InitHealthCheck.Workflow
         
-    open EasyDashboard.Domain.Template.Models
-    open EasyDashboard.Domain.Template.Factory
-    open EasyDashboard.Domain.Template.Provider
-    open EasyDashboard.Domain.Health.Models
+    open EasyDashboard.CheckEngine.Workflows.InitHealthCheck.HealthObservableProvider
+    open EasyDashboard.Domain.Environment.Template.Factory
+    open EasyDashboard.Domain.Environment.Template.Factory.DTOs
+    open EasyDashboard.Domain.Environment.Template.Provider
 
-    open System
-    open System.Text.Json;
-                              
-    type IncorrectTemplateDto = {
-        Name: string
-        Error: EnvironmentTemplateCreationError
-    }
-    type FailedTemplateDto = {
-        Name: string
-        Error: string
-    }
-    type ParsedTemplateDto =
-        | Correct of EnvironmentTemplate
-        | WithErrors of IncorrectTemplateDto
-        | Failed of FailedTemplateDto
-    type ProcessedTemplateDto =
-        | Processed of ParsedTemplateDto
-        | Unprocessed of FailedTemplateDto
-    type ParseTemplate = TemplateContentDto -> ParsedTemplateDto
+    open System.Text.Json
+
+    
+    type ParseTemplate = AcquiredTemplateContent -> ParsedTemplate
     let parseTemplate: ParseTemplate =
         fun template ->
             try
@@ -36,57 +21,54 @@
                         Error = err
                     }
             with
-            | exn -> Failed {
+            | exn -> Unrecognized {
                 Name = template.Filename
                 Error = exn.ToString()
             }
              
-    type ProcessTemplate = RequestedTemplateDto -> ProcessedTemplateDto   
-    let processTemplate: ProcessTemplate =
-        fun requestedTemplate ->
-            match requestedTemplate with
-            | TemplateError failedRequest ->
-                Unprocessed {
-                    Name = failedRequest.Filename
-                    Error = failedRequest.Error
-                }
-            | TemplateContent successfulRequest ->
-                Processed (parseTemplate successfulRequest)    
+    type ProcessTemplateAsync = RequestedTemplate Async -> ProcessedTemplate Async  
+    let processTemplateAsync: ProcessTemplateAsync =
+        fun requestedTemplateAsync ->
+            async {
+                let! requestedTemplate = requestedTemplateAsync
+                match requestedTemplate with
+                | TemplateError failedRequest ->
+                    return Faulted {
+                        Name = failedRequest.Filename
+                        Error = failedRequest.Error
+                    }
+                | TemplateContent successfulRequest ->
+                    return Processed (parseTemplate successfulRequest)    
+             }
             
     type InitHeathCheckCommand = {
         FolderPath: string
     }
-    type CheckEngineState =
-        | Working of EnvironmentHeartBeat IObservable
+    type CheckEngine =
+        | Working of EnvironmentHeartBeatCreationResult seq
         | Idling
         | Faulted of string                 
-    type InitHealthCheckUnitsAsync = InitHeathCheckCommand -> TemplatesProvider -> CheckEngineState Async seq   
-//    let initHealthCheckUnitsAsync: InitHealthCheckUnitsAsync =
-//        fun initCommand templateProvider ->
-//            async {
-//               let templateResult = templateProvider { FolderPath = initCommand.FolderPath }
-//               match templateResult with
-//               | Error err -> return Faulted err
-//               | Ok None -> return Idling
-//               | Ok (Some templateSequence) ->
-//                   let! templates = templateSequence |> Async.Parallel
-//                   let c = templates
-//                         |> Array.map (fun template -> processTemplate template)
-//                   
-//            }
-//            
-//            
-//            
+    type InitHealthCheckEngineAsync =
+        HealthObservableAsyncProvider -> TemplateAsyncProvider -> InitHeathCheckCommand -> CheckEngine Async 
+    let initHealthCheckEngineAsync: InitHealthCheckEngineAsync =
+        fun toHealthObservableAsync templateAsyncProvider initCommand  ->
+            async {
+               let availableTemplates = templateAsyncProvider { FolderPath = initCommand.FolderPath }
+               match availableTemplates with
+               | Error err -> return Faulted err
+               | Ok None -> return Idling
+               | Ok (Some requestedTemplates) ->
+                    let! environmentHearts =
+                        requestedTemplates
+                        |> Seq.map processTemplateAsync
+                        |> Seq.map toHealthObservableAsync
+                        |> Async.Sequential
+                    return Working (environmentHearts)      
+            }
             
             
-            
-            
-            
-            
-            
-            
-            
-    type WrapInObservable = EnvironmentTemplate -> EnvironmentHeartBeat IObservable            
+          
+                      
 //            
 //            
 //                

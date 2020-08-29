@@ -1,4 +1,4 @@
-﻿module EasyDashboard.Domain.ConstrainedType
+﻿module EasyDashboard.Domain.ConstrainedTypes
 
     open System
 
@@ -53,7 +53,7 @@
             Ok (ctor i)
 
 
-    let createLike fieldName  ctor pattern str = 
+    let createLike fieldName ctor pattern str = 
         if String.IsNullOrEmpty(str) then
             let msg = sprintf "%s: Must not be null or empty" fieldName 
             Error msg
