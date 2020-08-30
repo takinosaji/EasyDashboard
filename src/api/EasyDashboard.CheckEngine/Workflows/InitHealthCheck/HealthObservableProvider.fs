@@ -12,7 +12,7 @@
         Result<EnvironmentHeartBeat, EnvironmentHeartCreationError> IConnectableObservable
 
     type HealthObservableAsyncProvider =
-        ProcessedTemplate Async -> EnvironmentHeartBeatCreationResult Async
+        ProcessedTemplate -> EnvironmentHeartBeatCreationResult Async
         
     let createMulticastFrom<'T> (observable: 'T IObservable) =
         new BehaviorSubject<'T>(Unchecked.defaultof<'T>)
@@ -24,23 +24,27 @@
         |> Observable.Return
         |> createMulticastFrom
         
-    let parsedTemplateToObservable (parsedTemplate: ParsedTemplate) =
-        match parsedTemplate with
-        | Unrecognized faultedTemplate -> faultedTemplate |> faultedTemplateToObservable 
-        | WithErrors incorrectTemplate ->
-            incorrectTemplate
-                |> FaultedTemplate.FromIncorrectTemplate
-                |> faultedTemplateToObservable
-        | Correct correctTemplate ->
-            ()
+    let incorrectTemplateToObservable (incorrectTemplate: IncorrectTemplate) =
+        createFromIncorrectTemplate incorrectTemplate
+        |> Observable.Return
+        |> createMulticastFrom
+        
+    let parsedTemplateToObservableAsync (parsedTemplate: ParsedTemplate) =
+        async {
+            match parsedTemplate with
+            | Unrecognized faultedTemplate -> return faultedTemplate |> faultedTemplateToObservable 
+            | WithErrors incorrectTemplate -> return incorrectTemplate |> incorrectTemplateToObservable
+            | Correct correctTemplate ->
+                ()
+        }
                  
     let createEnvironmentHeartAsync: HealthObservableAsyncProvider =
-        fun processedTemplateAsync ->
+        fun processedTemplate ->
             async {
-                let! processedTemplate = processedTemplateAsync
+                let! processedTemplate = processedTemplate
                 match processedTemplate with
                 | Faulted faultedTemplate ->
                     return faultedTemplateToObservable faultedTemplate
                 | Processed parsedTemplate ->
-                    return parsedTemplateToObservable parsedTemplate
+                    return! parsedTemplateToObservableAsync parsedTemplate
             }

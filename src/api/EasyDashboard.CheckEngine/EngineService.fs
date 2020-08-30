@@ -1,10 +1,14 @@
 ﻿namespace EasyDashboard.CheckEngine
-
+    
+    open EasyDashboard.CheckEngine.InitHealthCheck.Workflow
+    
+    open System.Reactive.Subjects
     open Microsoft.Extensions.Hosting
     open Microsoft.Extensions.Logging
     open Microsoft.Extensions.Configuration
         
-    module We =
+    module Engine =
+        let instance = new BehaviorSubject<CheckEngineState>(Initializing)
         
             
     type EngineService(logger : ILogger<EngineService>,

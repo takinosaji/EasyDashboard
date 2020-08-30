@@ -1,4 +1,4 @@
-﻿module EasyDashboard.Domain.Environment.Template.Provider
+﻿module EasyDashboard.Domain.Environment.Template.Ports
 
     type GetTemplatesCommand = {
         FolderPath: string
@@ -11,7 +11,9 @@
         Filename: string
         Error: string
     }
+    
     type RequestedTemplate =
     | TemplateContent of AcquiredTemplateContent
-    | TemplateError of TemplateRequestError    
-    type TemplateAsyncProvider = GetTemplatesCommand -> Result<RequestedTemplate Async seq option, string>
+    | TemplateError of TemplateRequestError
+    type RequestTemplateAction = (unit -> RequestedTemplate Async)
+    type TemplateAsyncProvider = GetTemplatesCommand -> Result<RequestTemplateAction seq option, string>

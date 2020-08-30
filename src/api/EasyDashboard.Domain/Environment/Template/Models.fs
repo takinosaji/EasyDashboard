@@ -9,8 +9,7 @@
             createNotEmptyString (nameof HealthCriterion) HealthCriterion criterion         
         let value (HealthCriterion criterion) = criterion
    
-     
-     
+        
      
     module PropertyPath =
         type PropertyPath = private PropertyPath of string 
@@ -28,14 +27,14 @@
 
       
         
-    module Uri =
-        type Uri = private Uri of System.Uri   
+    module Url =
+        type Url = private Url of System.Uri   
         let create (uri: string) =                
             try
-                Ok(Uri(System.Uri(uri)))
+                Ok(Url(System.Uri(uri)))
             with
                 exn -> Error(exn.ToString())      
-        let value (Uri uri) = uri
+        let value (Url uri) = uri
     
     
     
@@ -55,7 +54,7 @@
         
     type EnvironmentEndpointTemplate =
         {
-            Url: Uri.Uri
+            Url: Url.Url
             Properties: EnvironmentPropertyTemplate list                
         }
 

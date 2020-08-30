@@ -1,15 +1,14 @@
 ﻿module EasyDashboard.Domain.Environment.HeartBeat.Factory
 
-
     open EasyDashboard.Domain.Environment.HeartBeat.Models
+    open EasyDashboard.Domain.Environment.HeartBeat.Ports
     open EasyDashboard.Domain.Environment.Models
     open EasyDashboard.Domain.Environment.Template.Factory    
     open EasyDashboard.Domain.Environment.Template.Models
-    open Result
     
+    open Result    
     open System
-    open System.Reactive.Subjects     
-    
+        
     type EnvironmentHeartCreationError =
         | InvalidName of string
         | InvalidDescription of string
@@ -29,10 +28,16 @@
             | InvalidRefreshInterval text
             | InvalidProperty text
             | InvalidUri text
-                -> text      
+                -> text
+
     
-    type CreateFromFailedTemplate = FaultedTemplate -> Result<EnvironmentHeartBeat, EnvironmentHeartCreationError>
-    let createFromFaultedTemplate: CreateFromFailedTemplate =
+    type CreateEnvironmentHeartBeatCommand = {
+        Template: EnvironmentTemplate
+        Data: EndpointResponse
+    }
+    
+    type CreateFromFaultedTemplate = FaultedTemplate -> Result<EnvironmentHeartBeat, EnvironmentHeartCreationError>
+    let createFromFaultedTemplate: CreateFromFaultedTemplate =
         fun faultedTemplate ->
             result {
                 let! name = faultedTemplate.Name
@@ -58,26 +63,18 @@
                 |> createFromFaultedTemplate
       
     //type CreateFromEnvironmentTemplate = EnvironmentHealthProvider -> EnvironmentTemplate -> Result<EnvironmentHeartBeat, EnvironmentHeartBeatCreationError>  
-    type CreateFromEnvironmentTemplate = EnvironmentTemplate -> Result<EnvironmentHeartBeat, EnvironmentHeartCreationError>  
-        
+    type CreateFromEnvironmentTemplate = CreateEnvironmentHeartBeatCommand -> Result<EnvironmentHeartBeat, EnvironmentHeartCreationError>  
+    let createFromEnvironmentTemplate: CreateFromEnvironmentTemplate =
+        ()
     
     
     type CreateFromParsedTemplate = ParsedTemplate -> Result<EnvironmentHeartBeat, EnvironmentHeartCreationError>       
     let createFromParsedTemplate (parsedTemplate: ParsedTemplate) =
         match parsedTemplate with
         | Unrecognized failedTemplate -> failedTemplate |> createFromFaultedTemplate 
-        | WithErrors incorrectTemplate ->
-           
-        | Correct environmentTemplate ->
-            result {
-                
-                
-                return {
-                    Name = correctTemplate.Name
-                    Description = correctTemplate.Description
-                    HeartbeatTime = correctTemplate.
-                }     
-            }
+        | WithErrors incorrectTemplate -> incorrectTemplate |> createFromIncorrectTemplate     
+        | Correct environmentTemplate -> environmentTemplate |> createFromEnvironmentTemplate
+          
 
 //    open System
 //    open Newtonsoft.Json.Linq

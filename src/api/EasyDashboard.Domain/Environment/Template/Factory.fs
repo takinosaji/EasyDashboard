@@ -137,7 +137,7 @@
         fun endpointDto ->
             result {
                 let adaptedUriFactory = EnvironmentTemplateCreationError.StringErrorAdapter
-                                                  Uri.create
+                                                  Url.create
                                                   InvalidUri
                       
                 let! uri = endpointDto.Uri |> adaptedUriFactory

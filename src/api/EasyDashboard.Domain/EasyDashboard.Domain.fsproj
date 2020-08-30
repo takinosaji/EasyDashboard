@@ -10,12 +10,11 @@
         <Compile Include="ConstrainedTypes.fs" />
         <Compile Include="Environment\Models.fs" />
         <Compile Include="Environment\Template\Models.fs" />
-        <Compile Include="Environment\Template\Provider.fs" />
+        <Compile Include="Environment\Template\Ports.fs" />
         <Compile Include="Environment\Template\Factory.fs" />
         <Compile Include="Environment\HeartBeat\Models.fs" />
-        <Compile Include="Environment\HeartBeat\Provider.fs" />
+        <Compile Include="Environment\HeartBeat\Ports.fs" />
         <Compile Include="Environment\HeartBeat\Factory.fs" />
-        <Compile Include="CalculationWorkflow.fs" />
     </ItemGroup>
 
     <ItemGroup>

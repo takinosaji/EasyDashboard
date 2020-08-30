@@ -1,6 +1,6 @@
 ﻿module EasyDashboard.CheckEngine.InitHealthCheck.FileSystemTemplateProvider
 
-    open EasyDashboard.Domain.Environment.Template.Provider
+    open EasyDashboard.Domain.Environment.Template.Ports
 
     open System.IO
         
@@ -17,23 +17,24 @@
         Filename: string
         Read: string Async
     }
-    let getRequestedTemplateAsync (path: string) :RequestedTemplate Async =
-        async {
-            let fileName = Path.GetFileName path
-            try
-                let! content = File.ReadAllTextAsync path |> Async.AwaitTask
-                return TemplateContent {
-                    Filename = fileName
-                    Content = content
-                }
-            with
-            | exn ->
-                return TemplateError {
-                    Filename = fileName
-                    Error = exn.ToString()
-                }
-        }
-        
+    let getRequestTemplateActions (path: string) :RequestTemplateAction =
+        fun () ->
+            async {
+                let fileName = Path.GetFileName path
+                try
+                    let! content = File.ReadAllTextAsync path |> Async.AwaitTask
+                    return TemplateContent {
+                        Filename = fileName
+                        Content = content
+                    }
+                with
+                | exn ->
+                    return TemplateError {
+                        Filename = fileName
+                        Error = exn.ToString()
+                    }
+            }
+  
     // TODO: Consider implementation of nonempty sequence 
     let getTemplatesFromFSAsync: TemplateAsyncProvider =
         fun command ->
@@ -46,6 +47,6 @@
                         | Some paths ->    
                             Ok (Some (paths
                                 |> Array.toSeq
-                                |> Seq.map getRequestedTemplateAsync))
+                                |> Seq.map getRequestTemplateActions))
                 with
                 | exn -> Error(exn.ToString())

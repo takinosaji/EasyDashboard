@@ -6,7 +6,9 @@
     open Microsoft.Extensions.Hosting
             
     let configureAppServices (_:HostBuilderContext) (services: IServiceCollection) =
-        services.AddHostedService<EngineService>() |> ignore
+        services
+            .AddHttpClient()
+            .AddHostedService<EngineService>() |> ignore
             
     type IHostBuilder with
         member builder.ConfigureCheckEngine() =
