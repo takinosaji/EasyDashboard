@@ -12,6 +12,7 @@
         <Compile Include="Environment\Template\Models.fs" />
         <Compile Include="Environment\Template\Ports.fs" />
         <Compile Include="Environment\Template\Factory.fs" />
+        <Compile Include="Environment\Template\Parsing.fs" />
         <Compile Include="Environment\HeartBeat\Models.fs" />
         <Compile Include="Environment\HeartBeat\Ports.fs" />
         <Compile Include="Environment\HeartBeat\Factory.fs" />

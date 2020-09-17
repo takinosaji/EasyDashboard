@@ -1,10 +1,10 @@
 ﻿module EasyDashboard.Domain.Environment.HeartBeat.Factory
 
     open EasyDashboard.Domain.Environment.HeartBeat.Models
-    open EasyDashboard.Domain.Environment.HeartBeat.Ports
+    open EasyDashboard.Domain.Environment.HeartBeat.Ports    
     open EasyDashboard.Domain.Environment.Models
-    open EasyDashboard.Domain.Environment.Template.Factory    
-    open EasyDashboard.Domain.Environment.Template.Models
+    open EasyDashboard.Domain.Environment.Template.Models    
+    open EasyDashboard.Domain.Environment.Template.Parsing
     
     open Result    
     open System
@@ -29,7 +29,6 @@
             | InvalidProperty text
             | InvalidUri text
                 -> text
-
     
     type CreateEnvironmentHeartBeatCommand = {
         Template: EnvironmentTemplate
@@ -64,8 +63,11 @@
       
     //type CreateFromEnvironmentTemplate = EnvironmentHealthProvider -> EnvironmentTemplate -> Result<EnvironmentHeartBeat, EnvironmentHeartBeatCreationError>  
     type CreateFromEnvironmentTemplate = CreateEnvironmentHeartBeatCommand -> Result<EnvironmentHeartBeat, EnvironmentHeartCreationError>  
-    let createFromEnvironmentTemplate: CreateFromEnvironmentTemplate =
-        ()
+    let createFromCorrectTemplate: CreateFromEnvironmentTemplate =
+        fun command ->
+            command.Data
+            ()
+        
     
     
     type CreateFromParsedTemplate = ParsedTemplate -> Result<EnvironmentHeartBeat, EnvironmentHeartCreationError>       
@@ -73,7 +75,7 @@
         match parsedTemplate with
         | Unrecognized failedTemplate -> failedTemplate |> createFromFaultedTemplate 
         | WithErrors incorrectTemplate -> incorrectTemplate |> createFromIncorrectTemplate     
-        | Correct environmentTemplate -> environmentTemplate |> createFromEnvironmentTemplate
+        | Correct environmentTemplate -> environmentTemplate |> createFromCorrectTemplate
           
 
 //    open System

@@ -4,6 +4,8 @@
     
     open System
 
+    Need dtos for factory???
+    
     type HealthStatus =
         | Healthy
         | Sick

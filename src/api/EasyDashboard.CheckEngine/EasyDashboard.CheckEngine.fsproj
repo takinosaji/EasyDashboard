@@ -6,7 +6,7 @@
 
     <ItemGroup>
         <Compile Include="Workflows\InitHealthCheck\FileSystemTemplateAdapter.fs" />
-        <Compile Include="Workflows\InitHealthCheck\EnvironmentHealthHttpAdapter.fs" />
+        <Compile Include="Workflows\InitHealthCheck\EndpointDataAsyncProviderFactoryAdapter.fs" />
         <Compile Include="Workflows\InitHealthCheck\HealthObservableProvider.fs" />
         <Compile Include="Workflows\InitHealthCheck\Workflow.fs" />
         <Compile Include="EngineService.fs" />

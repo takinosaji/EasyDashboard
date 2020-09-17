@@ -2,7 +2,7 @@
 
     open EasyDashboard.Domain.Environment.HeartBeat.Models
     open EasyDashboard.Domain.Environment.HeartBeat.Factory
-    open EasyDashboard.Domain.Environment.Template.Factory
+    open EasyDashboard.Domain.Environment.Template.Parsing
 
     open System
     open System.Reactive.Subjects
@@ -12,7 +12,7 @@
         Result<EnvironmentHeartBeat, EnvironmentHeartCreationError> IConnectableObservable
 
     type HealthObservableAsyncProvider =
-        ProcessedTemplate -> EnvironmentHeartBeatCreationResult Async
+        EndpointDataAsyncProvider -> ProcessedTemplate -> EnvironmentHeartBeatCreationResult Async
         
     let createMulticastFrom<'T> (observable: 'T IObservable) =
         new BehaviorSubject<'T>(Unchecked.defaultof<'T>)
@@ -34,17 +34,15 @@
             match parsedTemplate with
             | Unrecognized faultedTemplate -> return faultedTemplate |> faultedTemplateToObservable 
             | WithErrors incorrectTemplate -> return incorrectTemplate |> incorrectTemplateToObservable
-            | Correct correctTemplate ->
-                ()
+            | Correct correctTemplate -> return! correctTemplate |> correctTemplateToObservable
         }
                  
     let createEnvironmentHeartAsync: HealthObservableAsyncProvider =
         fun processedTemplate ->
             async {
-                let! processedTemplate = processedTemplate
                 match processedTemplate with
                 | Faulted faultedTemplate ->
                     return faultedTemplateToObservable faultedTemplate
-                | Processed parsedTemplate ->
+                | Parsed parsedTemplate ->
                     return! parsedTemplateToObservableAsync parsedTemplate
             }

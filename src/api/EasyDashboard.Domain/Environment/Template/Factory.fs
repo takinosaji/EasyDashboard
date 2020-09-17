@@ -48,36 +48,7 @@
                 match func input with
                 | Ok input -> Ok input
                 | Error value -> Error (ctor value)
-                
-    type IncorrectTemplate = {
-        Name: string
-        Error: EnvironmentTemplateCreationError
-    }
-    type FaultedTemplate = {
-        Name: string
-        Error: string
-    } with
-        static member FromIncorrectTemplate (t: IncorrectTemplate) = 
-            match t.Error with
-            | InvalidName text
-            | InvalidDescription text
-            | InvalidCriterion text
-            | InvalidRefreshInterval text
-            | InvalidProperty text
-            | InvalidUri text
-             -> {
-                 Name = t.Name
-                 Error = text
-                 }
-            
-    type ParsedTemplate =
-        | Correct of EnvironmentTemplate
-        | WithErrors of IncorrectTemplate
-        | Unrecognized of FaultedTemplate
-    type ProcessedTemplate =
-        | Processed of ParsedTemplate
-        | Faulted of FaultedTemplate
-        
+                        
     type ToHealthCriteriaModel = DTOs.HealthCriteriaTemplateDto ->
                                     Result<HealthCriteriaTemplate, EnvironmentTemplateCreationError>
     let toHealthCriteriaModel: ToHealthCriteriaModel =

@@ -1,30 +1,9 @@
 ﻿module EasyDashboard.CheckEngine.InitHealthCheck.Workflow
         
     open EasyDashboard.CheckEngine.Workflows.InitHealthCheck.HealthObservableProvider
-    open EasyDashboard.Domain.Environment.Template.Factory
-    open EasyDashboard.Domain.Environment.Template.Factory.DTOs
+    open EasyDashboard.Domain.Environment.Template.Parsing
     open EasyDashboard.Domain.Environment.Template.Ports
-
-    open System.Text.Json
-    
-    type ParseTemplate = AcquiredTemplateContent -> ParsedTemplate
-    let parseTemplate: ParseTemplate =
-        fun template ->
-            try
-                let templateDto = JsonSerializer.Deserialize<EnvironmentTemplateDto>(template.Content)
-                match toEnvironmentModel templateDto with
-                | Ok model -> Correct model
-                | Error err ->
-                    WithErrors {
-                        Name = template.Filename
-                        Error = err
-                    }
-            with
-            | exn -> Unrecognized {
-                Name = template.Filename
-                Error = exn.ToString()
-            }
-             
+                 
     type ProcessTemplateAsync = (unit -> RequestedTemplate Async) -> ProcessedTemplate Async  
     let processTemplateAsync: ProcessTemplateAsync =
         fun requestTemplateAsync ->
@@ -37,7 +16,7 @@
                         Error = failedRequest.Error
                     }
                 | TemplateContent successfulRequest ->
-                    return Processed (parseTemplate successfulRequest)    
+                    return Parsed (parseTemplate successfulRequest)    
              }
          
     // TODO: Substitute active pattern with regular function when this logic will have to become injectable   
@@ -54,11 +33,11 @@
         | Idling
         | Faulted of string                 
     type InitHealthCheckEngineAsync =
-        HealthObservableAsyncProvider -> TemplateAsyncProvider -> InitHeathCheckCommand -> CheckEngineState Async 
+         TemplateAsyncProvider -> HealthObservableAsyncProvider -> InitHeathCheckCommand -> CheckEngineState Async 
     let initHealthCheckEngineAsync: InitHealthCheckEngineAsync =
-        fun toHealthObservableAsync providerTemplatesAsync initCommand  ->
+        fun toHealthObservableAsync provideTemplatesAsync initCommand  ->
             async {
-               let availableTemplates = providerTemplatesAsync { FolderPath = initCommand.FolderPath }
+               let availableTemplates = provideTemplatesAsync { FolderPath = initCommand.FolderPath }
                match availableTemplates with
                | Error err -> return Faulted err
                | Ok None -> return Idling
@@ -66,7 +45,7 @@
                     let! templates =
                         requestedTemplates 
                         |> Seq.map processTemplateAsync
-                        |> Async.Sequential    
+                        |> Async.Parallel    
                     match templates with
                     | HaveConflicts err ->
                         return Faulted err
@@ -74,7 +53,7 @@
                         let! environmentHearts =
                             templates
                             |> Seq.map toHealthObservableAsync
-                            |> Async.Sequential
+                            |> Async.Parallel
                         return Working (environmentHearts)      
             }
             

@@ -1,5 +1,6 @@
 ﻿module EasyDashboard.Domain.Environment.HeartBeat.Ports
 
+    open EasyDashboard.Domain.Environment.Template.Models
     open EasyDashboard.Domain.Environment.Template.Models.Url
         
     open System.Net
@@ -26,6 +27,7 @@
         | RequestExecutionError of EndpointErrorDto
         
     type EndpointDataAsyncProvider = Url -> EndpointResponse Async
+    type EnvironmentHealthAsyncProvider = EnvironmentTemplate -> ???? new type which includes template data and endpoint response / EnvironmentTemplate Async
 //    
 //        type EndpointContent = {
 //        Endpoint: EnvironmentEndpointTemplate
