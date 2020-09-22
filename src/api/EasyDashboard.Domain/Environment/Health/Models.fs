@@ -1,10 +1,10 @@
-﻿module EasyDashboard.Domain.Environment.HeartBeat.Models
+﻿module EasyDashboard.Domain.Environment.Health.Models
 
     open EasyDashboard.Domain.Environment.Models
     
     open System
-
-    Need dtos for factory???
+//
+//    Need dtos for factory???
     
     type HealthStatus =
         | Healthy
@@ -19,7 +19,7 @@
         Status: HealthStatus
     }
         
-    type EnvironmentHeartBeat = {
+    type EnvironmentHealth = {
         Name: Name.Name
         Description: Description.Description option
         Status: HealthStatus
@@ -28,5 +28,5 @@
     }
     
     type HealthDashboard = {
-        Environments: EnvironmentHeartBeat list
+        Environments: EnvironmentHealth list
     }

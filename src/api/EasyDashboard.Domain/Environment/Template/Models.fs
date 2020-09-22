@@ -6,7 +6,7 @@
     module HealthCriterion =
         type HealthCriterion = private HealthCriterion of string    
         let create criterion =
-            createNotEmptyString (nameof HealthCriterion) HealthCriterion criterion         
+            createNotEmptyString ("HealthCriterion") HealthCriterion criterion         
         let value (HealthCriterion criterion) = criterion
    
         
@@ -14,7 +14,7 @@
     module PropertyPath =
         type PropertyPath = private PropertyPath of string 
         let create path =
-            createLimitedString (nameof PropertyPath) PropertyPath 500 path           
+            createLimitedString ("PropertyPath") PropertyPath 500 path           
         let value (PropertyPath path) = path   
         
         
@@ -22,7 +22,7 @@
     module RefreshInterval =   
         type RefreshInterval = private RefreshInterval of int   
         let create interval =
-            createInt  (nameof RefreshInterval) RefreshInterval 10 300 interval            
+            createInt  ("RefreshInterval") RefreshInterval 10 300 interval            
         let value (RefreshInterval interval) = interval
 
       

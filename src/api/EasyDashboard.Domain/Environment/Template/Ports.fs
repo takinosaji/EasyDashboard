@@ -3,7 +3,7 @@
     type GetTemplatesCommand = {
         FolderPath: string
     }
-    type AcquiredTemplateContent = {
+    type AcquiredTemplate = {
         Filename: string
         Content : string
     }
@@ -12,8 +12,8 @@
         Error: string
     }
     
-    type RequestedTemplate =
-    | TemplateContent of AcquiredTemplateContent
+    type TemplateResponse =
+    | RequestedTemplate of AcquiredTemplate
     | TemplateError of TemplateRequestError
-    type RequestTemplateAction = (unit -> RequestedTemplate Async)
-    type TemplateAsyncProvider = GetTemplatesCommand -> Result<RequestTemplateAction seq option, string>
+    type TemplateAsyncRequest = (unit -> TemplateResponse Async)
+    type ProvideTemplateRequestAsync = GetTemplatesCommand -> Result<TemplateAsyncRequest seq option, string>

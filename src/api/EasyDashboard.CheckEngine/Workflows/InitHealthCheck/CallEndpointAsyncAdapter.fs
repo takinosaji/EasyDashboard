@@ -1,15 +1,14 @@
-﻿module EasyDashboard.CheckEngine.Workflows.InitHealthCheck.EnvironmentHealthHttpProvider
+﻿module EasyDashboard.CheckEngine.Workflows.InitHealthCheck.Adapters
 
     open EasyDashboard.Domain.Environment.HeartBeat.Ports
-    open EasyDashboard.Domain.Environment.Template.Models
     open EasyDashboard.Domain.Environment.Template.Models.Url
 
     open System.Net.Http
     
-    type EndpointDataAsyncProviderFactory = IHttpClientFactory -> EndpointDataAsyncProvider
+    type EndpointDataAsyncProviderFactory = IHttpClientFactory -> CallEndpointAsync
     
     let createGetHttpRequest (url: Url) =
-        new HttpRequestMessage(HttpMethod.Get, (Url.value url))       
+        new HttpRequestMessage(HttpMethod.Get, (value url))       
     
     let getEndpointDataAsyncProvider: EndpointDataAsyncProviderFactory =
         fun factory ->
@@ -43,5 +42,4 @@
                             Error = exn.ToString()
                         }                
                 }
-            
-    let EnvironmentHealthAsyncProvider CREATE templa and use in observable providerte based heartbeat data
+           

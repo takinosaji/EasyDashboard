@@ -34,9 +34,9 @@
         | Unrecognized of FaultedTemplate
     type ProcessedTemplate =
         | Parsed of ParsedTemplate
-        | Faulted of FaultedTemplate
+        | Unprocessed of FaultedTemplate
     
-    type ParseTemplate = AcquiredTemplateContent -> ParsedTemplate
+    type ParseTemplate = AcquiredTemplate -> ParsedTemplate
     let parseTemplate: ParseTemplate =
         fun template ->
             try

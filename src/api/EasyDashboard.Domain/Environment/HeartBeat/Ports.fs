@@ -16,7 +16,7 @@
         ResponseCode: HttpStatusCode
     }
     
-    type EndpointErrorDto = {
+    type EndpointExecutionErrorDto = {
         Url: Url
         Error: string
     }
@@ -24,27 +24,12 @@
     type EndpointResponse =
         | SuccessfulResponse of EndpointContentDto 
         | NonSuccessfulResponse of EndpointBadResponseDto         
-        | RequestExecutionError of EndpointErrorDto
+        | RequestExecutionError of EndpointExecutionErrorDto
         
-    type EndpointDataAsyncProvider = Url -> EndpointResponse Async
-    type EnvironmentHealthAsyncProvider = EnvironmentTemplate -> ???? new type which includes template data and endpoint response / EnvironmentTemplate Async
-//    
-//        type EndpointContent = {
-//        Endpoint: EnvironmentEndpointTemplate
-//        Content: string
-//    }
-//    
-//    type EndpointError = {
-//        Endpoint: EnvironmentEndpointTemplate
-//        Error: string
-//    }
-//    
-//    type EnvironmentEndpointResponse =
-//        | SuccessfulResponse of EndpointContent 
-//        | EndpointError of EndpointError 
-//
-//    
-//    type FetchUrlAsync = Uri -> string Async
-//    
-//    
-//    type EndpointDataProviderAsync = FetchUrlAsync -> EnvironmentEndpointTemplate -> EnvironmentEndpointResponse Async
+    type EnvironmentHeartBeat = {
+        Template: EnvironmentTemplate
+        Data: EndpointResponse list
+    }
+        
+    type CallEndpointAsync = Url -> EndpointResponse Async
+    type ProvideEnvironmentHeartBeatAsync = CallEndpointAsync -> EnvironmentTemplate -> EnvironmentHeartBeat Async

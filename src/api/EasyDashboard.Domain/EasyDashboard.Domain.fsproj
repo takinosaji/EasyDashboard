@@ -13,9 +13,11 @@
         <Compile Include="Environment\Template\Ports.fs" />
         <Compile Include="Environment\Template\Factory.fs" />
         <Compile Include="Environment\Template\Parsing.fs" />
-        <Compile Include="Environment\HeartBeat\Models.fs" />
+        <Compile Include="Environment\Template\CollectionValidation.fs" />
         <Compile Include="Environment\HeartBeat\Ports.fs" />
         <Compile Include="Environment\HeartBeat\Factory.fs" />
+        <Compile Include="Environment\Health\Models.fs" />
+        <Compile Include="Environment\Health\Factory.fs" />
     </ItemGroup>
 
     <ItemGroup>

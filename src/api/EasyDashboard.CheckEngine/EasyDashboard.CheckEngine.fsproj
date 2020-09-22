@@ -2,11 +2,13 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <LangVersion>preview</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Workflows\InitHealthCheck\FileSystemTemplateAdapter.fs" />
-        <Compile Include="Workflows\InitHealthCheck\EndpointDataAsyncProviderFactoryAdapter.fs" />
+        <Compile Include="Workflows\InitHealthCheck\ProvideTemplateRequestAsyncAdapter.fs" />
+        <Compile Include="Workflows\InitHealthCheck\CallEndpointAsyncAdapter.fs" />
+        <Compile Include="Workflows\InitHealthCheck\ProvideEnvironmentHeartBeatAsyncAdapter.fs" />
         <Compile Include="Workflows\InitHealthCheck\HealthObservableProvider.fs" />
         <Compile Include="Workflows\InitHealthCheck\Workflow.fs" />
         <Compile Include="EngineService.fs" />

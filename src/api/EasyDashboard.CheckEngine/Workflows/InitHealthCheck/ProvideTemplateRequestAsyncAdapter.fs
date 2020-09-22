@@ -1,4 +1,4 @@
-﻿module EasyDashboard.CheckEngine.InitHealthCheck.FileSystemTemplateProvider
+﻿module EasyDashboard.CheckEngine.InitHealthCheck.Adapters
 
     open EasyDashboard.Domain.Environment.Template.Ports
 
@@ -17,13 +17,13 @@
         Filename: string
         Read: string Async
     }
-    let getRequestTemplateActions (path: string) :RequestTemplateAction =
+    let getTemplateFSRequests (path: string): TemplateAsyncRequest =
         fun () ->
             async {
                 let fileName = Path.GetFileName path
                 try
                     let! content = File.ReadAllTextAsync path |> Async.AwaitTask
-                    return TemplateContent {
+                    return RequestedTemplate {
                         Filename = fileName
                         Content = content
                     }
@@ -36,7 +36,7 @@
             }
   
     // TODO: Consider implementation of nonempty sequence 
-    let getTemplatesFromFSAsync: TemplateAsyncProvider =
+    let getTemplatesRequestsFromFSAsync: ProvideTemplateRequestAsync =
         fun command ->
                 try
                     match getTemplatePaths command.FolderPath with
@@ -47,6 +47,6 @@
                         | Some paths ->    
                             Ok (Some (paths
                                 |> Array.toSeq
-                                |> Seq.map getRequestTemplateActions))
+                                |> Seq.map getTemplateFSRequests))
                 with
                 | exn -> Error(exn.ToString())

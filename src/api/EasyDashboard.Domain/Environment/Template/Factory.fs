@@ -83,12 +83,12 @@
                 EnvironmentTemplateCreationError.StringErrorAdapter smartCtor InvalidProperty      
             
             result {
-                let! name = propertyDto.Name |> adaptedPropertyPartFactory Name.create
+                let! name = propertyDto.Name.Trim() |> adaptedPropertyPartFactory Name.create
                 let! description =
-                    if String.IsNullOrEmpty propertyDto.Description then
+                    if String.IsNullOrWhiteSpace propertyDto.Description then
                         Ok None
                     else
-                        propertyDto.Description
+                        propertyDto.Description.Trim()
                         |> adaptedPropertyPartFactory Description.create
                         |> toOption
                 let! path = propertyDto.Path |> adaptedPropertyPartFactory PropertyPath.create 
@@ -124,12 +124,12 @@
     let toEnvironmentModel: ToEnvironmentModel =
         fun environmentDto ->                
             result {
-                let! name = environmentDto.Name |>
+                let! name = environmentDto.Name.Trim() |>
                             EnvironmentTemplateCreationError.StringErrorAdapter Name.create InvalidName
-                let! description = if String.IsNullOrEmpty environmentDto.Description then
+                let! description = if String.IsNullOrWhiteSpace environmentDto.Description then
                                     Ok None
                                     else 
-                                       environmentDto.Description
+                                       environmentDto.Description.Trim()
                                         |> EnvironmentTemplateCreationError.StringErrorAdapter
                                            Description.create
                                            InvalidDescription
