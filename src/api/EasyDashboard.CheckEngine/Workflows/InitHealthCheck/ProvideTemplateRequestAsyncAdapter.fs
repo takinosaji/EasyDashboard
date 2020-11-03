@@ -13,10 +13,7 @@
 
          with
             | exn -> Error(exn.ToString())
-    type RequestTemplateCommand = {
-        Filename: string
-        Read: string Async
-    }
+            
     let getTemplateFSRequests (path: string): TemplateAsyncRequest =
         fun () ->
             async {

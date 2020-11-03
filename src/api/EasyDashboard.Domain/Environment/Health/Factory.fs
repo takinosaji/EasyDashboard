@@ -73,18 +73,18 @@
                     Properties = None
                 }
             }
-        
-    
-    
-    type CreateFromParsedTemplateAsync = ParsedTemplate -> Result<EnvironmentHealth, EnvironmentHealthCreationError> Async       
-    let createFromParsedTemplateAsync
-        (heartBeatAsyncProvider: ProvideEnvironmentHeartBeatAsync)
-        (parsedTemplate: ParsedTemplate) =
-        async {
-            match parsedTemplate with
-            | Unrecognized failedTemplate -> return failedTemplate |> createFromFaultedTemplate 
-            | WithErrors incorrectTemplate -> return incorrectTemplate |> createFromIncorrectTemplate     
-            | Correct environmentTemplate ->
-                let! heartBeat = environmentTemplate |> heartBeatAsyncProvider
-                return heartBeat |> createFromHeartBeat
-        }
+         
+//    type CreateFromParsedTemplateAsync =
+//         ProvideEnvironmentHeartBeatAsync
+//            -> ParsedTemplate
+//            -> Result<EnvironmentHealth, EnvironmentHealthCreationError> Async       
+//    let createFromParsedTemplateAsync: CreateFromParsedTemplateAsync =
+//        fun provideEnvironmentHeartBeatAsync parsedTemplate ->
+//        async {
+//            match parsedTemplate with
+//            | Unrecognized failedTemplate -> return failedTemplate |> createFromFaultedTemplate 
+//            | WithErrors incorrectTemplate -> return incorrectTemplate |> createFromIncorrectTemplate     
+//            | Correct environmentTemplate ->
+//                let! heartBeat = environmentTemplate |> provideEnvironmentHeartBeatAsync
+//                return heartBeat |> createFromHeartBeat
+//        }

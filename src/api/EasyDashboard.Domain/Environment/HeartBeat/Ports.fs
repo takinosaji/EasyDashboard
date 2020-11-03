@@ -26,10 +26,11 @@
         | NonSuccessfulResponse of EndpointBadResponseDto         
         | RequestExecutionError of EndpointExecutionErrorDto
         
+    type CallEndpointAsync = Url -> EndpointResponse Async
+    
     type EnvironmentHeartBeat = {
         Template: EnvironmentTemplate
         Data: EndpointResponse list
-    }
-        
-    type CallEndpointAsync = Url -> EndpointResponse Async
+    }        
+    
     type ProvideEnvironmentHeartBeatAsync = CallEndpointAsync -> EnvironmentTemplate -> EnvironmentHeartBeat Async

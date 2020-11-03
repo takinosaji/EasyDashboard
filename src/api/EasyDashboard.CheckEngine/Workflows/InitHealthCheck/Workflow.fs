@@ -32,9 +32,9 @@
     type InitHealthCheckEngineAsync =
          ProvideTemplateRequestAsync -> CallEndpointAsync -> InitHeathCheckCommand -> CheckEngineState Async 
     let initHealthCheckEngineAsync: InitHealthCheckEngineAsync =
-        fun provideTemplatesAsync getEndpointDataAsync initCommand  ->
+        fun provideTemplatesAsync callEndpointAsync initCommand  ->
             
-            let getEnvironmentHeartBeatAsync = getEnvironmentHeartBeatAsync getEndpointDataAsync
+            let getEnvironmentHeartBeatAsync = getEnvironmentHeartBeatAsync callEndpointAsync
             let createEnvironmentHeartAsync = createEnvironmentHeartAsync getEnvironmentHeartBeatAsync
             
             async {

@@ -37,10 +37,8 @@
         (provideEnvironmentHeartBeatAsync: ProvideEnvironmentHeartBeatAsync)
         (correctTemplate: EnvironmentTemplate) =
         async {
-            return {
-                Template = correctTemplate
-                Data = []
-            }
+            correctTemplate
+            |> provideEnvironmentHeartBeatAsync
             |> createFromHeartBeat
             |> Observable.Return
             |> createMulticastFrom
